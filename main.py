@@ -9,6 +9,7 @@ from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
 
 characters = list(string.ascii_letters + string.digits + "!@#$%^&*()")
 site = ""
+user = ""
 password = ""
 password_file = {}
 encrypted = ""
@@ -59,11 +60,11 @@ def generate_password():
     print(random_password)
     
 # Write a new password to the pasword file
-def add_password(site, password_site):
+def add_password(site, user, password_site):
     password_file[site] = password_site
     with open('password.encode', 'a+') as f:
             encrypted = Fernet(key).encrypt(password_site.encode())
-            f.write(site + ":" + encrypted.decode() + "\n")
+            f.write(site + " " + user + ":" + encrypted.decode() + "\n")
 
 # Read password file and get the password 
 def get_password(site):
@@ -90,7 +91,7 @@ def menu():
     print("""
     (1) Generate random password
     (2) Add new password
-    (3) Get password
+    (3) Get login information
     (q) Quit""")
 
     done = False
@@ -100,11 +101,12 @@ def menu():
             generate_password()
         elif choice == "2":
             site = input("Enter the site: ")
+            user = input("Enter User: ")
             password = input("Enter the password: ")
-            add_password(site, password)
+            add_password(site, user, password)
         elif choice == "3":           
             site = input("Enter site: ")
-            print(f"Password for {site} is ({get_password(site)})")  
+            print(f"Your login information for {site} is ({get_password(site)})")  
         elif choice == "q":
             done = True
             print("Bye!")
