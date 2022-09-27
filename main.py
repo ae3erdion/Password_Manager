@@ -108,8 +108,7 @@ def menu():
         elif choice == "3":           
             site = input("Enter site: ")
             user, password = get_password(site)
-            print(f"Your login information for {user} @ {site} is ({password})")
-            #print(f"Your login information for {site} is ({get_password(site)})")  
+            print(f"Your login information for {user} @ {site} is ({password})")  
         elif choice == "q":
             done = True
             print("Bye!")
