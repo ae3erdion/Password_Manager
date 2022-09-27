@@ -64,14 +64,15 @@ def add_password(site, user, password_site):
     password_file[site] = password_site
     with open('password.encode', 'a+') as f:
             encrypted = Fernet(key).encrypt(password_site.encode())
-            f.write(site + " " + user + ":" + encrypted.decode() + "\n")
+            f.write(site + "," + user + ":" + encrypted.decode() + "\n")
 
 # Read password file and get the password 
 def get_password(site):
     with open('password.encode', 'r') as f:
             for line in f:
                site, encrypted = line. split (":")
-               password_file[site] = Fernet(key).decrypt(encrypted.encode()).decode()
+               site, user = site.split(",")
+               password_file[site] = user, Fernet(key).decrypt(encrypted.encode()).decode()
     return password_file[site]
 
 # Check for all files.  
@@ -106,7 +107,9 @@ def menu():
             add_password(site, user, password)
         elif choice == "3":           
             site = input("Enter site: ")
-            print(f"Your login information for {site} is ({get_password(site)})")  
+            user, password = get_password(site)
+            print(f"Your login information for {user} @ {site} is ({password})")
+            #print(f"Your login information for {site} is ({get_password(site)})")  
         elif choice == "q":
             done = True
             print("Bye!")
