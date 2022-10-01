@@ -2,7 +2,6 @@ import base64
 import os
 import string
 import random
-from unittest import TestCase
 from cryptography.fernet import Fernet
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.kdf.pbkdf2 import PBKDF2HMAC
@@ -16,7 +15,7 @@ encrypted = ""
 
 # Generate key for encryption
 def generate_key():
-    password = input ("Enter password: ")
+    password = input("Enter password: ")
     password = bytes(password, 'utf-8')
     salt = b'\xceN\x01s\xabE\x15\x02\xd9pz(1\t\xbc4'
     kdf = PBKDF2HMAC(
@@ -59,7 +58,7 @@ def generate_password():
     random_password = ("".join(random_password))
     print(random_password)
     
-# Write a new password to the pasword file
+# Write a new password to the password file
 def add_password(site, user, password_site):
     password_file[site] = password_site
     with open('password.encode', 'a+') as f:
@@ -74,6 +73,8 @@ def get_password(site):
                site, user = site.split(",")
                password_file[site] = user, Fernet(key).decrypt(encrypted.encode()).decode()
     return password_file[site]
+
+
 
 # Check for all files.  
 def main():
@@ -98,20 +99,53 @@ def menu():
     done = False
     while not done:
         choice = input("Enter choice: ")
+ # When selected generate random password       
         if choice == "1":
-            generate_password()
+            print("Your password is: ")
+            password = generate_password()
+            password = str(password) 
+# Add random password to file            
+            answer = input("Do you want to add the password? Yes/No ")
+            if answer.upper() == "YES":
+                site = input("Enter the site: ")
+# Check if the site already exist                    
+                with open('password.encode', 'r') as f:
+                    site_validation = f.read()
+                    if site.upper() in site_validation:
+                        print("Site already exist!")
+                    else:
+                        user = input("Enter User: ")
+                        add_password(site.upper(), user, password)
+                        print("Done!")
+            elif answer.upper() == "NO":
+                pass
+            else:
+                print("Invalid Choice")
+
+# When selected add password to file        
         elif choice == "2":
             site = input("Enter the site: ")
-            user = input("Enter User: ")
-            password = input("Enter the password: ")
-            add_password(site, user, password)
+# Check if the site already exist             
+            with open('password.encode', 'r') as f:
+                site_validation = f.read()
+                if site.upper() in site_validation:
+                    print("Site already exist!")
+                    pass
+                else:
+                    user = input("Enter User: ")
+                    password = input("Enter the password: ")
+                    add_password(site.upper(), user, password)
+                    print("Done!")
+# When selected retrieve password from file        
         elif choice == "3":           
             site = input("Enter site: ")
-            user, password = get_password(site)
-            print(f"Your login information for {user} @ {site} is ({password})")  
+            user, password = get_password(site.upper())
+            print(f"Your login information for {user} @ {site.upper()} is ({password})")
+# When selected exit program        
         elif choice == "q":
             done = True
             print("Bye!")
+        
         else:
             print("Invalid Choice")
 
