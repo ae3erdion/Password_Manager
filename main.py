@@ -55,6 +55,7 @@ def generate_password():
     random.shuffle(random_password)
     random_password = ("".join(random_password))
     print(random_password)
+    return random_password
     
 # Write a new password to the password file
 def add_password(site, user, password_site):
