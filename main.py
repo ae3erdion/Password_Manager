@@ -45,8 +45,6 @@ def generate_key():
             print("What would you like to do: ")
             menu()
         
-
- 
 # Randon password generator
 def generate_password():
     length = int(16)
@@ -73,8 +71,6 @@ def get_password(site):
                site, user = site.split(",")
                password_file[site] = user, Fernet(key).decrypt(encrypted.encode()).decode()
     return password_file[site]
-
-
 
 # Check for all files.  
 def main():
@@ -149,23 +145,5 @@ def menu():
         else:
             print("Invalid Choice")
 
-
-
-
-
-
-
-
-
 if __name__== "__main__":
     main()        
- 
-
-
-
-
-   
-
-    
-
-
